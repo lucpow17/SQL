@@ -1,0 +1,38 @@
+-- Create a clothing store database
+
+CREATE TABLE store (id INTEGER PRIMARY KEY, name TEXT, stock INTEGER, production_cost INTEGER, price INTEGER);
+
+INSERT INTO store VALUES (1,'blue_tshirt', 25, 10, 15);
+INSERT INTO store VALUES (2, 'red_tshirt', 30, 9, 16);
+INSERT INTO store VALUES (3, 'orange_tshirt', 10, 5, 10);
+INSERT INTO store VALUES (4, 'dark_jeans', 21, 15, 45);
+INSERT INTO store VALUES (5, 'light_jeans', 16, 12, 40);
+INSERT INTO store VALUES (6, 'underwear', 50, 3, 9);
+INSERT INTO store VALUES (7, 'socks', 50, 2, 5);
+INSERT INTO store VALUES (8, 'parka', 10, 50, 250);
+INSERT INTO store VALUES (9, 'pullover', 15, 22, 65);
+INSERT INTO store VALUES (10, 'windbreaker', 10, 17, 55);
+INSERT INTO store VALUES (11, 'lingerie', 12, 15, 40);
+INSERT INTO store VALUES (12, 'flannels', 10, 8, 19);
+INSERT INTO store VALUES (13, 'hoodies', 15, 12, 55);
+INSERT INTO store VALUES (14, 'hats', 20, 5, 25);
+INSERT INTO store VALUES (15, 'bracelets', 5, 35, 70);
+
+--display the database ordered by price
+SELECT * FROM store 
+ORDER BY price desc;
+
+--what products are running low on stock/overstocked?
+SELECT name,stock 
+FROM store 
+ORDER BY stock asc;
+
+--what are the 5 most costly items to produce, and how popular are they?
+SELECT name,production_cost,popularity
+FROM clothing_store
+ORDER BY production_cost desc
+LIMIT 5;
+
+--what are the 5 most popular items?
+SELECT name,popularity, price FROM store 
+ORDER BY popularity desc LIMIT 5; 
