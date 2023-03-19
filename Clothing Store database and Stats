@@ -1,6 +1,11 @@
 -- Create a clothing store database
 
-CREATE TABLE store (id INTEGER PRIMARY KEY, name TEXT, stock INTEGER, production_cost INTEGER, price INTEGER);
+CREATE TABLE store (
+  id INTEGER PRIMARY KEY, 
+  name TEXT, 
+  stock INTEGER, 
+  production_cost INTEGER, 
+  price INTEGER);
 
 INSERT INTO store VALUES (1,'blue_tshirt', 25, 10, 15);
 INSERT INTO store VALUES (2, 'red_tshirt', 30, 9, 16);
@@ -33,6 +38,6 @@ FROM clothing_store
 ORDER BY production_cost desc
 LIMIT 5;
 
---what are the 5 most popular items?
+--what are the 5 most popular items and how much do we charge for them currently?
 SELECT name,popularity, price FROM store 
 ORDER BY popularity desc LIMIT 5; 
