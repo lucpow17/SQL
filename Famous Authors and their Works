@@ -104,7 +104,7 @@ INSERT INTO books (author_id, title, ReleaseYear)
 
 
 
-//* Show the title and release year of each book along with the last name of the author, ordered by oldest to newest releases.*//
+-- when was each book released, and who was the author? 
 
 SELECT authors.Lastname, books.title, ReleaseYear FROM authors
     JOIN books
@@ -113,7 +113,7 @@ SELECT authors.Lastname, books.title, ReleaseYear FROM authors
  
 
 
-//* Show the book title, release year, and author's last name only for the authors that have passed away*//
+-- which authors on the list are no longer living, and what works did they produce/when?
  
 SELECT books.title, books.ReleaseYear, authors.Lastname FROM books
     JOIN authors
@@ -123,7 +123,7 @@ SELECT books.title, books.ReleaseYear, authors.Lastname FROM books
 
 
 
-//* Show the title and author's last name for the books written by Americans since the start of the 21st century *//
+-- which books were written by American authors since the turn of the century?
 SELECT books.title, authors.lastname FROM authors
     JOIN books
     ON authors.id = books.author_id
@@ -133,8 +133,7 @@ SELECT books.title, authors.lastname FROM authors
   
 
 
-//* Show the breakdown by nationality of the number of authors from each country and how many books they have written cumulatively, ordered by most books written to least books written *// 
-  
+-- how did each nationality attribute to the number of authors produced and books written on this list? 
 SELECT authors.nationality, COUNT(DISTINCT authors.lastname) as '# of Authors', COUNT(books.id) as '# of Books' FROM books
     JOIN authors
     ON authors.id = books.author_id
