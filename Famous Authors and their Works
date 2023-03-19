@@ -1,0 +1,142 @@
+/* Create table about the people and what they do here */
+
+CREATE TABLE authors (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Lastname TEXT,
+    FirstName TEXT,
+    Nationality TEXT,
+    YearofDeath INTEGER);
+
+INSERT INTO authors (LastName, FirstName, Nationality,YearofDeath)
+    VALUES ('Allende', 'Isabel','Chilean',NULL);
+INSERT INTO authors (LastName, FirstName, Nationality,YearofDeath)
+    VALUES ('Atwood', 'Margaret','Canadian',NULL);
+INSERT INTO authors (LastName, FirstName, Nationality,YearofDeath)
+    VALUES ('Franzen', 'Jonathon','American',NULL);
+INSERT INTO authors (LastName, FirstName, Nationality,YearofDeath)
+    VALUES ('McEwan', 'Ian', 'English',NULL);
+INSERT INTO authors (LastName, FirstName, Nationality,YearofDeath)
+    VALUES ('Mitchell', 'Dave', 'English',NULL);
+INSERT INTO authors (LastName, FirstName, Nationality,YearofDeath)
+    VALUES ('Morrison', 'Toni','American',NULL);
+INSERT INTO authors (LastName, FirstName, Nationality,YearofDeath)
+    VALUES ('Murakami', 'Haruki', 'Japanese',NULL);
+INSERT INTO authors (LastName, FirstName, Nationality,YearofDeath)
+    VALUES ('Roth', 'Philip', 'American',2018);
+INSERT INTO authors (LastName, FirstName, Nationality,YearofDeath)
+    VALUES ('Smith', 'Zadie','English',NULL);
+INSERT INTO authors (LastName, FirstName, Nationality,YearofDeath)
+    VALUES ('Updike', 'John','American',2009);
+INSERT INTO authors (LastName, FirstName, Nationality, YearofDeath)
+    VALUES ('Clare','Cassandra', 'Iranian', NULL);
+    
+CREATE TABLE books (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author_id INTEGER,
+    title TEXT,
+    ReleaseYear INTEGER);
+    
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (1, 'House of Spirits', 1982);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (1, 'City of Beasts', 2002);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (2, 'Oryx and Crake', 2003);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (2, "The Handmaid's Tale", 1986);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (2, 'The Blind Assassin', 2000);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (3, 'The Corrections', 2001);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (3,'How to Be Alone', 2002);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (3, 'The Discomfort Zone', 2006);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (3, 'Freedom', 2010);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (4,'First Love, Last Rites',1976);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (4,'Atonement', 2001);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (4,'Saturday', 2005);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (5,'Ghostwritten', 1999);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (5,'Cloud Atlas', 2004);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (5,'number9dream',2001);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (5,'The Bone Clocks', 2014);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (6,'Beloved', 1987);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (6,'Paradise', 1997);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (6,'Home', 2012);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (7,'A Wild Sheep Chase', 1982);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (7,'The Wind-Up Bird Chronicle', 2005);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (7,'1Q84', 2011);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (8,'The Plot Against America', 2005);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (8,'Everyman', 2006);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (9,'White Teeth', 2000);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (9,'On Beauty', 2006);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (9,'NW', 2012);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (10,'Of the Farm', 1965);
+INSERT INTO books (author_id, title,ReleaseYear)
+    VALUES (10,'Olinger Stories: A Selection', 1964);
+ INSERT INTO books (author_id, title, ReleaseYear)
+    VALUES (11, 'City of Bones', 2007);
+INSERT INTO books (author_id, title, ReleaseYear)
+    VALUES (11,'Clockwork Angel',2010);
+INSERT INTO books (author_id, title, ReleaseYear)
+    VALUES (11, 'Chain of Iron',2021);
+    
+
+
+
+//* Show the title and release year of each book along with the last name of the author, ordered by oldest to newest releases.*//
+
+SELECT authors.Lastname, books.title, ReleaseYear FROM authors
+    JOIN books
+    ON authors.id = books.author_id
+    ORDER BY ReleaseYear asc;
+ 
+
+
+//* Show the book title, release year, and author's last name only for the authors that have passed away*//
+ 
+SELECT books.title, books.ReleaseYear, authors.Lastname FROM books
+    JOIN authors
+    ON books.author_id = authors.id
+    WHERE authors.YearofDeath > 0
+    ORDER BY ReleaseYear asc; 
+
+
+
+//* Show the title and author's last name for the books written by Americans since the start of the 21st century *//
+SELECT books.title, authors.lastname FROM authors
+    JOIN books
+    ON authors.id = books.author_id
+    WHERE books.releaseyear >= 2000
+    AND authors.nationality = 'American'
+    ORDER BY releaseyear desc; 
+  
+
+
+//* Show the breakdown by nationality of the number of authors from each country and how many books they have written cumulatively, ordered by most books written to least books written *// 
+  
+SELECT authors.nationality, COUNT(DISTINCT authors.lastname) as '# of Authors', COUNT(books.id) as '# of Books' FROM books
+    JOIN authors
+    ON authors.id = books.author_id
+    GROUP BY authors.nationality
+    ORDER BY COUNT (books.title) desc; 
