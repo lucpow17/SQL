@@ -1,0 +1,45 @@
+~~ This project was performed on a small sample of data collected for various artists and their songs, along with a number of other measurements such as popularity, duration, loudness, energy, etc.
+
+
+-- Which 3 artists have the most songs with a popularity rating of 90 or more?
+
+SELECT distinct sp.artist_name, COUNT(sp.artist_name) as 'Number of Songs' FROM BIT_DB.Spotifydata sp
+WHERE sp.popularity >= 90
+GROUP BY sp.artist_name
+ORDER BY COUNT(sp.artist_name) desc LIMIT 3;
+
+
+--My grandpa wants some suggestions for new music to listen to, but doesn't want anything too loud that may hurt his hearing.
+
+SELECT sp.artist_name, sp.track_name, sp.loudness FROM BIT_DB.Spotifydata sp
+WHERE sp.loudness >=-5
+GROUP BY sp.track_name
+ORDER BY sp.loudness desc;
+
+
+-- What were the 5 least popular songs that lasted 3 minutes or longer?
+
+SELECT sp.track_name, sp.duration_ms FROM BIT_DB.Spotifydata sp
+WHERE sp.duration_ms >= 180000
+ORDER BY sp.popularity asc LIMIT 5
+
+
+--What (arbitrary) popularity category would each song fall into?
+
+SELECT sp.track_name,
+CASE
+    WHEN sp.popularity >= 95 THEN 'Mega Hit'
+    WHEN sp.popularity >= 90 THEN 'Hit'
+    WHEN sp.popularity >= 80 THEN 'Popular'
+    WHEN sp.popularity >= 70 THEN 'Unpopular'
+    ELSE 'Flop'
+END AS 'Popularity Category'
+FROM BIT_DB.Spotifydata sp
+ORDER BY sp.popularity desc;
+
+
+--What songs are included by Olivia Rodrigo, and how is each songs' energy?
+
+SELECT sp.track_name FROM BIT_DB.Spotifydata sp
+WHERE sp.artist_name = 'Olivia Rodrigo'
+ORDER BY sp.energy desc
