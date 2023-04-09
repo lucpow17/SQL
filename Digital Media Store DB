@@ -88,7 +88,7 @@ ON i.trackid=t.TrackId
 
 --Show the total sales made by each sales agent.
 
-SELECT ROUND(SUM(i.total)), e.FirstName || ' ' || e.lastname AS fullname
+SELECT ROUND(SUM(i.total), 2), e.FirstName || ' ' || e.lastname AS fullname
 FROM employees e
 JOIN customers c
 ON c.SupportRepId=e.EmployeeId
