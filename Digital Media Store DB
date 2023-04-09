@@ -1,0 +1,100 @@
+//This database contains data from a digital media store, and includes tables such as customers, employees, genres, artists, albums, media types and more.//
+
+
+
+--Show the customerid, name, and country of all custoers outside the United States.-
+
+SELECT customerid,
+firstname || ' ' || lastname AS fullname,
+country
+FROM customers
+WHERE country <> 'USA';
+
+
+
+--Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.--
+
+SELECT c.firstname || ' ' ||c.LastName AS fullname,
+i.InvoiceId, i.invoicedate, i.BillingCountry
+FROM invoices i
+JOIN customers c
+ON c.customerid=i.CustomerId
+WHERE i.billingcountry = 'Brazil'
+ORDER BY i.InvoiceDate asc;
+
+
+
+--Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.
+
+SELECT inv.invoiceid, emp.FirstName || ' ' || emp.LastName AS fullname
+FROM employees emp
+JOIN customers cust ON cust.SupportRepId = emp.EmployeeId
+JOIN invoices inv ON inv.CustomerId = cust.CustomerId;
+
+
+
+--Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
+
+SELECT inv.Total,
+cust.FirstName || ' ' || cust.lastname AS 'Customer Fullname',
+cust.Country,
+emp.FirstName || ' ' || emp.LastName AS 'Sales Agenet'
+FROM customers cust 
+JOIN employees emp ON cust.SupportRepId=emp.EmployeeId
+JOIN invoices inv ON inv.CustomerId=cust.CustomerId
+
+
+
+--Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
+
+SELECT tracks.name AS Song, albums.Title AS Album, med.name as 'Media Type', genres.Name AS Genre
+FROM tracks
+JOIN albums ON albums.AlbumId = tracks.AlbumId
+JOIN media_types med ON med.MediaTypeId=tracks.MediaTypeId
+JOIN genres ON genres.GenreId=tracks.GenreId;
+
+
+
+
+--Write a query that includes the purchased track name AND artist name with each invoice line ID.
+
+SELECT i.InvoiceLineId, t.Name AS 'Song Title', ar.Name AS 'Artist'
+FROM invoice_items i
+LEFT JOIN tracks t 
+ON i.TrackId=t.TrackId
+INNER JOIN albums a 
+ON a.albumID=t.AlbumId
+LEFT JOIN artists ar 
+ON ar.ArtistId=a.ArtistId;
+
+
+
+--What was the sales total for 2009?
+
+SELECT SUM(total)
+FROM invoices
+WHERE invoicedate LIKE '2009%';
+
+
+
+--Write a query that includes the purchased track name with each invoice line ID.
+
+SELECT i.invoicelineid, t.Name
+FROM invoice_items i
+JOIN tracks t
+ON i.trackid=t.TrackId
+
+
+
+--Show the total sales made by each sales agent.
+
+SELECT ROUND(SUM(i.total)), e.FirstName || ' ' || e.lastname AS fullname
+FROM employees e
+JOIN customers c
+ON c.SupportRepId=e.EmployeeId
+JOIN invoices i
+ON i.CustomerId=c.CustomerId
+
+WHERE e.Title LIKE 'Sales%'
+GROUP BY fullname
+
