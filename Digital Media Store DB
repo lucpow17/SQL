@@ -98,3 +98,20 @@ ON i.CustomerId=c.CustomerId
 WHERE e.Title LIKE 'Sales%'
 GROUP BY fullname
 
+
+
+--Which sales agent made the most dollars in sales in 2009?
+
+SELECT ROUND(SUM(i.total), 2) AS 'Total Sales', e.FirstName, e.lastname 
+FROM employees e
+JOIN customers c
+ON c.SupportRepId=e.EmployeeId
+
+JOIN invoices i
+ON i.CustomerId=c.CustomerId
+
+WHERE e.Title LIKE 'Sales%'
+AND i.InvoiceDate LIKE '2009%'
+GROUP BY e.firstname
+ORDER BY 'Total Sales' desc LIMIT 1
+
