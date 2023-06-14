@@ -12,7 +12,17 @@ WHERE country <> 'USA';
 
 
 
---Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.--
+
+-- Show the full name of all customers from Brazil. 
+
+SELECT firstname || ' ' || lastname as 'Full Name'
+FROM customers
+WHERE country = 'Brazil'
+
+
+
+
+--Find the Invoices of customers who are from Brazil, and sort by newest to oldest orders.  
 
 SELECT c.firstname || ' ' ||c.LastName AS fullname,
 i.InvoiceId, i.invoicedate, i.BillingCountry
@@ -20,7 +30,26 @@ FROM invoices i
 JOIN customers c
 ON c.customerid=i.CustomerId
 WHERE i.billingcountry = 'Brazil'
-ORDER BY i.InvoiceDate asc;
+ORDER BY i.InvoiceDate desc;
+
+
+
+
+-- Show all employees in the Sales Agent role. 
+
+SELECT firstname, lastname
+FROM employees
+WHERE title LIKE 'sales%agent'
+
+
+
+
+-- What countries have items been ordered from, and how many orders have been made in each country? 
+
+SELECT billingcountry, COUNT(billingcountry)
+FROM invoices
+GROUP BY billingcountry;
+
 
 
 
@@ -35,37 +64,47 @@ JOIN invoices inv ON inv.CustomerId = cust.CustomerId;
 
 --Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
 
-SELECT inv.Total,
-cust.FirstName || ' ' || cust.lastname AS 'Customer Fullname',
-cust.Country,
-emp.FirstName || ' ' || emp.LastName AS 'Sales Agenet'
-FROM customers cust 
-JOIN employees emp ON cust.SupportRepId=emp.EmployeeId
-JOIN invoices inv ON inv.CustomerId=cust.CustomerId
+SELECT 
+i.total, 
+c.firstname || ' ' || c.lastname as 'Customer Full Name', 
+e.firstname || ' ' || e.lastname as 'Employee Full Name'
+FROM invoices i
+JOIN customers c
+ON i.customerid = c.CustomerId
+JOIN employees e
+ON e.employeeid = c.SupportRepId
 
 
 
 --Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
 
-SELECT tracks.name AS Song, albums.Title AS Album, med.name as 'Media Type', genres.Name AS Genre
-FROM tracks
-JOIN albums ON albums.AlbumId = tracks.AlbumId
-JOIN media_types med ON med.MediaTypeId=tracks.MediaTypeId
-JOIN genres ON genres.GenreId=tracks.GenreId;
+SELECT 
+  t.Name as 'Track',
+  a.title as 'Album Title',
+  m.Name as 'Media Type',
+  g.Name as 'Genre'
+FROM tracks t
+JOIN albums a
+ON t.AlbumId = a.AlbumId
+JOIN Media_types m
+ON t.MediaTypeId = m.MediaTypeId
+JOIN genres g
+ON t.GenreId = g.GenreId
 
 
 
 
 --Write a query that includes the purchased track name AND artist name with each invoice line ID.
 
-SELECT i.InvoiceLineId, t.Name AS 'Song Title', ar.Name AS 'Artist'
+SELECT
+    i.InvoiceLineId as 'Invoice Line ID',
+    a.Name as 'Artist Name',
+    t.Name as 'Track'
 FROM invoice_items i
-LEFT JOIN tracks t 
-ON i.TrackId=t.TrackId
-INNER JOIN albums a 
-ON a.albumID=t.AlbumId
-LEFT JOIN artists ar 
-ON ar.ArtistId=a.ArtistId;
+JOIN tracks t
+ON i.trackid = t.TrackId
+JOIN artists a
+ON t.Composer = a.Name;
 
 
 
@@ -75,14 +114,6 @@ SELECT SUM(total)
 FROM invoices
 WHERE invoicedate LIKE '2009%';
 
-
-
---Write a query that includes the purchased track name with each invoice line ID.
-
-SELECT i.invoicelineid, t.Name
-FROM invoice_items i
-JOIN tracks t
-ON i.trackid=t.TrackId
 
 
 
@@ -95,23 +126,22 @@ ON c.SupportRepId=e.EmployeeId
 JOIN invoices i
 ON i.CustomerId=c.CustomerId
 
-WHERE e.Title LIKE 'Sales%'
+WHERE e.Title LIKE '%Agent'
 GROUP BY fullname
 
 
 
 --Which sales agent made the most dollars in sales in 2009?
 
-SELECT ROUND(SUM(i.total), 2) AS 'Total Sales', e.FirstName, e.lastname 
-FROM employees e
+SELECT 
+    ROUND(SUM(i.Total),2) as 'Total Sales - 2009',
+    e.FirstName || ' ' || e.LastName as 'Top Sales Agent'
+FROM invoices i
 JOIN customers c
-ON c.SupportRepId=e.EmployeeId
-
-JOIN invoices i
-ON i.CustomerId=c.CustomerId
-
-WHERE e.Title LIKE 'Sales%'
-AND i.InvoiceDate LIKE '2009%'
-GROUP BY e.firstname
-ORDER BY 'Total Sales' desc LIMIT 1
+ON i.CustomerId = c.CustomerId
+JOIN employees e
+ON c.supportrepid = e.EmployeeId
+WHERE i.invoicedate LIKE '2009%'
+GROUP BY c.SupportRepId
+LIMIT 1;
 
