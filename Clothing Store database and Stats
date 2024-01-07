@@ -24,7 +24,7 @@ INSERT INTO store VALUES (13, 'hoodies', 15, 12, 55, 14);
 INSERT INTO store VALUES (14, 'hats', 20, 5, 25, 10);
 INSERT INTO store VALUES (15, 'bracelets', 5, 35, 70, 6);
 
---List all the items carried at the store, ordered by price
+--List all the items carried at the store, ordered from most to least expensive.
 SELECT * FROM store 
 ORDER BY price desc;
 
